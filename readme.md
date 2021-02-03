@@ -1,5 +1,5 @@
 
-# Atualizar o S.O.
+## Atualizar o S.O.
 
 sudo apt-get update
 
@@ -70,6 +70,17 @@ sudo ifconfig mac0 up
 
 
 
+##Comandos mais utilizados
+
+docker-compose up -d
+
+docker-compose down
+
+docker system prune -a
+
+docker ps
+
+docker exec -it CONTAINERID /bin/sh
 
 
 
