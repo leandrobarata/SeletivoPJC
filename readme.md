@@ -72,17 +72,17 @@ sudo ifconfig mac0 up
 
 
 
-##Comandos mais utilizados \
+##Comandos mais utilizados
+\
+docker-compose up -d
 
-docker-compose up -d \
+docker-compose down
 
-docker-compose down \
+docker system prune -a
 
-docker system prune -a \
+docker ps
 
-docker ps \
-
-docker exec -it CONTAINERID /bin/sh \
+docker exec -it CONTAINERID /bin/sh
 
 
 
