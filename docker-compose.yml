@@ -9,8 +9,8 @@ services:
      www.lab.local: 192.168.1.250
      app_1: 192.168.2.100
      app_2: 192.168.2.200
-    ports:
-       - 80:80
+#    ports:
+#       - 80:80
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -20,8 +20,8 @@ services:
     networks:
      vlan10:
       ipv4_address: 192.168.1.250
-    environment:
-      VLAN: 10
+     vlan20:
+      ipv4_address: 192.168.2.250
     depends_on:
       - app_1
       - app_2
