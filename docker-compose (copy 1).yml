@@ -1,0 +1,132 @@
+version: '3'
+services:
+
+   proxy:
+    image: nginx:alpine
+    container_name: proxy
+    hostname: proxy
+    extra_hosts:
+     www.lab.local: 192.168.1.250
+     app_1: 192.168.2.100
+     app_2: 192.168.2.200
+#    ports:
+#       - 80:80
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_ADMIN
+    volumes: 
+      - ./src/proxy/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+     vlan10:
+      ipv4_address: 192.168.1.250
+     vlan20:
+      ipv4_address: 192.168.2.250
+    depends_on:
+      - app_1
+      - app_2
+    restart: always
+
+
+   app_1:
+    image: nginx:alpine
+    container_name: app_1
+    hostname: app_1
+    extra_hosts:
+     www.lab.local: 192.168.1.250
+     app_1:  192.168.2.100
+     app_2: 192.168.2.200
+    ports:
+      - 8080:8080
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_ADMIN
+    volumes: 
+      - ./src/app_1:/usr/share/nginx/html
+    networks:
+     vlan20:
+      ipv4_address: 192.168.2.100
+    environment:
+      VLAN: 20
+    restart: always
+
+
+   app_2:
+    image: nginx:alpine
+    container_name: app_2
+    hostname: app_2
+    extra_hosts:
+     www.lab.local: 192.168.1.250
+     app_1:  192.168.2.100
+     app_2: 192.168.2.200
+    ports:
+      - 9090:9090
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_ADMIN
+    volumes: 
+    - ./src/app_2:/usr/share/nginx/html
+    networks:
+     vlan20:
+      ipv4_address: 192.168.2.200
+    environment:
+       VLAN: 20
+    restart: always
+
+   fw:
+    image: nginx:alpine
+    container_name: fw
+    hostname: fw
+    extra_hosts:
+     www.lab.local: 192.168.1.250
+     app_2: 192.168.2.200
+    ports:
+      - 9090:9090
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_ADMIN
+    volumes: 
+    - ./src/app_2:/usr/share/nginx/html
+    networks:
+     vlan10:
+      ipv4_address: 192.168.1.240
+     vlan20:
+      ipv4_address: 192.168.2.240
+     vlan30:
+      ipv4_address: 10.1.1.240
+     vlan_wan:
+      ipv4_address: 201.10.151.102
+
+   
+
+networks:
+   vlan_wan:
+     driver: bridge
+     ipam:
+       config:
+         - subnet: 201.10.151.100/30
+   vlan10:
+     driver: macvlan
+     driver_opts:
+       parent: eth0.10
+     ipam:  
+       config:
+         - subnet: 192.168.1.0/24
+   vlan20:
+     driver: macvlan
+     driver_opts:
+       parent: eth0.20
+     ipam:  
+       config:
+         - subnet: 192.168.2.0/24
+   vlan30: 
+     driver: macvlan
+     driver_opts:
+       parent: eth0.30
+     ipam:  
+       config:
+         - subnet: 10.1.1.0/24
+
