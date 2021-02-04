@@ -30,11 +30,14 @@ services:
 
    app_1:
     image: nginx:alpine
+    command: bash -c chmod 777 /tmp/route
+    privileged: true
     container_name: app_1
     hostname: app_1
     extra_hosts:
      www.lab.local: 192.168.1.250
      app_1:  192.168.2.100
+     app_2: 192.168.2.200
     ports:
       - 8080:8080
     cap_add:
@@ -42,7 +45,8 @@ services:
       - NET_RAW
       - SYS_ADMIN
     volumes: 
-      - ./src/app_1:/usr/share/nginx/html
+      #- ./src/app_1/index.html:/usr/share/nginx/html/
+      - ./src/app_1/route.sh:/tmp/route
     networks:
      vlan20:
       ipv4_address: 192.168.2.100
@@ -53,8 +57,36 @@ services:
 
    app_2:
     image: nginx:alpine
+    command: bash -c chmod 777 /tmp/route
+    privileged: true
     container_name: app_2
     hostname: app_2
+    extra_hosts:
+     www.lab.local: 192.168.1.250
+     app_1:  192.168.2.100
+     app_2: 192.168.2.200
+    ports:
+      - 9090:9090
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_ADMIN
+    volumes: 
+      #- ./src/app_2/index.html:/usr/share/nginx/html/
+      - ./src/app_2/route.sh:/tmp/route
+    networks:
+     vlan20:
+      ipv4_address: 192.168.2.200
+    environment:
+       VLAN: 20
+    restart: always
+
+   fw:
+    image: nginx:alpine
+#    command: bash -c "./route.sh"
+    privileged: true
+    container_name: fw
+    hostname: fw
     extra_hosts:
      www.lab.local: 192.168.1.250
      app_2: 192.168.2.200
@@ -67,13 +99,14 @@ services:
     volumes: 
     - ./src/app_2:/usr/share/nginx/html
     networks:
+     vlan10:
+      ipv4_address: 192.168.1.240
      vlan20:
-      ipv4_address: 192.168.2.200
-    environment:
-       VLAN: 20
-    restart: always
-
-
+      ipv4_address: 192.168.2.240
+     vlan30:
+      ipv4_address: 10.1.1.240
+     vlan_wan:
+      ipv4_address: 201.10.151.102
 
    
 

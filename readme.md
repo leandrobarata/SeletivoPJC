@@ -58,17 +58,13 @@ systemctl enable docker
 
 
 
-###
+### TESTE PROXY REVERSO > APP_1 e APP_2
 
-ip link add mac0 link eth0 type macvlan mode bridge \
-ip addr add 192.168.1.254/24 dev mac0 \
-ifconfig mac0 up 
+sudo ip link add mac0 link eth0.10 type macvlan mode bridge
 
-#### 
-\
-sudo ip link add mac0 link eth0 type ipvlan mode l3
-sudo ip addr add 192.168.1.254/24 dev mac0
-sudo ifconfig mac0 up
+sudo ip addr add 192.168.1.10/24 dev mac0
+
+sudo ip link set mac0 up 
 
 
 
