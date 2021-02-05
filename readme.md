@@ -131,7 +131,9 @@ sudo ip link set mac0 up
 
 
 
-##Comandos mais utilizados
+## COMANDOS MAIS UTILIZADOS
+
+#DOCKER
 
 docker-compose up -d
 
@@ -144,5 +146,13 @@ docker ps
 docker exec -it CONTAINERID /bin/sh
 
 
+#GIT
 
+git push origin main
+
+git add .
+
+git commit -m ""
+
+git push origin main
 
