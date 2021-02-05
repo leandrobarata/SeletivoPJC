@@ -69,7 +69,7 @@ sudo ip addr add 10.1.1.10/24 dev mac0
 sudo ip link set mac0 up 
 
 
-\ PROCESSOS PARA  TROUBLESHOOTING
+### PROCESSOS PARA  TROUBLESHOOTING
 
 ### TESTES PARA PROXY REVERSO > APP_1 e APP_2
 
@@ -82,7 +82,7 @@ sudo ip link set mac0 up
 
 
 ##Comandos mais utilizados
-\
+
 docker-compose up -d
 
 docker-compose down
