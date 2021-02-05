@@ -129,9 +129,9 @@ sudo ip addr add 192.168.1.10/24 dev mac0
 
 sudo ip link set mac0 up 
 
+\
 
-
-#### COMANDOS MAIS UTILIZADOS
+###### COMANDOS MAIS UTILIZADOS:
 
 
 ## DOCKER
