@@ -56,10 +56,22 @@ sudo mv docker-compose-Linux-x86_64 /usr/local/bin/docker-compose
 
 systemctl enable docker 
 
+\
+
+### Configurar uma interface docker host para VLAN30
+\
+
+sudo ip link add mac0 link eth0.30 type macvlan mode bridge
+
+sudo ip addr add 10.1.1.10/24 dev mac0
+
+sudo ip link set mac0 up 
 
 
-### TESTE PROXY REVERSO > APP_1 e APP_2
 
+
+### TESTES PARA PROXY REVERSO > APP_1 e APP_2
+\
 sudo ip link add mac0 link eth0.10 type macvlan mode bridge
 
 sudo ip addr add 192.168.1.10/24 dev mac0

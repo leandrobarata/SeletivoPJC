@@ -3,20 +3,20 @@ services:
 
    proxy:
     image: nginx:alpine
+    command: sh -c "chmod 777 /tmp/route && /tmp/route && sleep 3600"
     container_name: proxy
     hostname: proxy
     extra_hosts:
      www.lab.local: 192.168.1.250
      app_1: 192.168.2.100
      app_2: 192.168.2.200
-#    ports:
-#       - 80:80
     cap_add:
       - NET_ADMIN
       - NET_RAW
       - SYS_ADMIN
     volumes: 
       - ./src/proxy/nginx.conf:/etc/nginx/nginx.conf
+      - ./src/proxy/route.sh:/tmp/route
     networks:
      vlan10:
       ipv4_address: 192.168.1.250
@@ -30,22 +30,19 @@ services:
 
    app_1:
     image: nginx:alpine
-    command: bash -c chmod 777 /tmp/route
-    privileged: true
+    command: sh -c "chmod 777 /tmp/route && /tmp/route && sleep 3600"
     container_name: app_1
     hostname: app_1
     extra_hosts:
      www.lab.local: 192.168.1.250
      app_1:  192.168.2.100
      app_2: 192.168.2.200
-    ports:
-      - 8080:8080
     cap_add:
       - NET_ADMIN
       - NET_RAW
       - SYS_ADMIN
     volumes: 
-      #- ./src/app_1/index.html:/usr/share/nginx/html/
+      - ./src/app_1/index.html:/usr/share/nginx/html/index.html
       - ./src/app_1/route.sh:/tmp/route
     networks:
      vlan20:
@@ -57,22 +54,19 @@ services:
 
    app_2:
     image: nginx:alpine
-    command: bash -c chmod 777 /tmp/route
-    privileged: true
+    command: sh -c "chmod 777 /tmp/route && /tmp/route && sleep 3600"
     container_name: app_2
     hostname: app_2
     extra_hosts:
      www.lab.local: 192.168.1.250
      app_1:  192.168.2.100
      app_2: 192.168.2.200
-    ports:
-      - 9090:9090
     cap_add:
       - NET_ADMIN
       - NET_RAW
       - SYS_ADMIN
     volumes: 
-      #- ./src/app_2/index.html:/usr/share/nginx/html/
+      - ./src/app_2/index.html:/usr/share/nginx/html/index.html
       - ./src/app_2/route.sh:/tmp/route
     networks:
      vlan20:
@@ -82,22 +76,22 @@ services:
     restart: always
 
    fw:
-    image: nginx:alpine
-#    command: bash -c "./route.sh"
-    privileged: true
+    image: leandrobarata/alpine-iptables:1.0
+    command: bin/sh -c "chmod 777 /tmp/route && chmod 777 /tmp/fw.sh &&/tmp/route && /tmp/fw.sh && sleep 3600"
     container_name: fw
     hostname: fw
     extra_hosts:
      www.lab.local: 192.168.1.250
+     app_1: 192.168.2.100
      app_2: 192.168.2.200
-    ports:
-      - 9090:9090
     cap_add:
       - NET_ADMIN
       - NET_RAW
       - SYS_ADMIN
     volumes: 
-    - ./src/app_2:/usr/share/nginx/html
+      - ./src/firewall/route.sh:/tmp/route
+      - ./src/firewall/fw.sh:/tmp/fw.sh
+      - ./src/firewall/backup.rule.firewall:/root/backup.rule.firewall
     networks:
      vlan10:
       ipv4_address: 192.168.1.240

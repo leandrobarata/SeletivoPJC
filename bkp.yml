@@ -30,6 +30,8 @@ services:
 
    app_1:
     image: nginx:alpine
+    command: sh -c "/tmp/route && sleep 3600"
+    privileged: true
     container_name: app_1
     hostname: app_1
     extra_hosts:
@@ -43,7 +45,8 @@ services:
       - NET_RAW
       - SYS_ADMIN
     volumes: 
-      - ./src/app_1:/usr/share/nginx/html
+      - ./src/app_1/index.html:/usr/share/nginx/html/index.html
+      - ./src/app_1/route.sh:/tmp/route
     networks:
      vlan20:
       ipv4_address: 192.168.2.100
@@ -54,6 +57,8 @@ services:
 
    app_2:
     image: nginx:alpine
+    command: sh -c "/tmp/route && sleep 3600"
+    privileged: true
     container_name: app_2
     hostname: app_2
     extra_hosts:
@@ -67,7 +72,8 @@ services:
       - NET_RAW
       - SYS_ADMIN
     volumes: 
-    - ./src/app_2:/usr/share/nginx/html
+      - ./src/app_2/index.html:/usr/share/nginx/html/index.html
+      - ./src/app_2/route.sh:/tmp/route
     networks:
      vlan20:
       ipv4_address: 192.168.2.200
@@ -76,7 +82,9 @@ services:
     restart: always
 
    fw:
-    image: nginx:alpine
+    image: leandrobarata/alpine-iptables:1.0
+    command: bin/sh -c "chmod 777 /tmp/route && chmod 777 /tmp/fw.sh &&/tmp/route && /tmp/fw.sh &&sleep 3600"
+    privileged: true
     container_name: fw
     hostname: fw
     extra_hosts:
@@ -89,7 +97,9 @@ services:
       - NET_RAW
       - SYS_ADMIN
     volumes: 
-    - ./src/app_2:/usr/share/nginx/html
+      - ./src/firewall/route.sh:/tmp/route
+      - ./src/firewall/fw.sh:/tmp/fw.sh
+      - ./src/firewall/backup.rule.firewall:/root/backup.rule.firewall
     networks:
      vlan10:
       ipv4_address: 192.168.1.240
