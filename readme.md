@@ -147,6 +147,20 @@ docker ps
 docker exec -it CONTAINERID /bin/sh
 
 
+## CRIAR DOCKER IMAGEM PUSH
+
+sudo docker login --username=leandrobarata
+
+sudo docker run --cap-add=NET_ADMIN  -it alpine bin/sh
+
+sudo docker run --name some-zabbix-appliance -p 80:80 -p 10051:10051 -d zabbix/zabbix-appliance
+
+sudo docker pull zabbix/zabbix-appliance
+
+sudo docker tag [IDCONTAINER] leandrobarata/zabbix:1.0
+
+sudo docker push leandrobarata/zabbix:1.0
+
 
 ## GIT
 
@@ -157,4 +171,7 @@ git add .
 git commit -m ""
 
 git push origin main
+
+
+
 
