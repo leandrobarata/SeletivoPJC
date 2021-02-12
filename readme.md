@@ -107,7 +107,7 @@ docker-compose up -d
 
 
 
-####### PONTOS DE ATENÇÃO
+##### PONTOS DE ATENÇÃO
 
 Ao final , todos os cantainers estão funcionando , mais após na configuração do arquivo YML na sessão COMMAND: e adicionar os comandos para execução de adcionar rotas padrões os APP_1 e APP_2 e o PROXY não sobem o serviço NGINX (porta 80).
 
@@ -116,6 +116,8 @@ Se for removido a sessão COMMAND , os nginx sobe.
 Fiz configurações do firewall para rotear as redes , definindo os gateways nas interfaces pem como suas VLANs. Configurado o IPTABLES para roteamento na ETH3 para saida ip externo proposto 201.10.151.100 simulando a nuvem.
 
 Servidor Zabbix implementação incompleta 
+
+
 
 ### PROCESSOS PARA  TROUBLESHOOTING
 
